@@ -1,5 +1,6 @@
 package ru.practicum.dinner;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -41,25 +42,37 @@ public class Main {
         System.out.println("Введите название блюда:");
         String dishName = scanner.nextLine();
 
-        // добавьте новое блюдо
+        dc.saveDish(dishType, dishName);
     }
 
     private static void generateDishCombo() {
-        System.out.println("Начинаем конструировать обед...");
+        if (dc.checkMap()) {
+            System.out.println("Начинаем конструировать обед...");
 
-        System.out.println("Введите количество наборов, которые нужно сгенерировать:");
-        int numberOfCombos = scanner.nextInt();
-        scanner.nextLine();
+            System.out.println("Введите количество наборов, которые нужно сгенерировать:");
+            int numberOfCombos = scanner.nextInt();
+            scanner.nextLine();
 
-        System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
-        String nextItem = scanner.nextLine();
+            System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
 
-        //реализуйте ввод типов блюд
-        while (!nextItem.isEmpty()) {
+            ArrayList<String> items = new ArrayList<>();
+            String nextItem = scanner.nextLine();
 
+            //реализуйте ввод типов блюд
+            while (!nextItem.isEmpty()) {
+                if (dc.checkType(nextItem)) {
+                    items.add(nextItem);
+                } else {
+                    System.out.println("Типа " + nextItem + " нет в меню. Введите существующий:");
+                    dc.printType();
+                }
+                nextItem = scanner.nextLine();
+            }
+
+            // сгенерируйте комбинации блюд и выведите на экран
+            dc.generateCombos(numberOfCombos, items);
+        } else {
+            System.out.println("К сожалению, список блюд пуст. Для генерации заполните меню");
         }
-
-        // сгенерируйте комбинации блюд и выведите на экран
-
     }
 }
